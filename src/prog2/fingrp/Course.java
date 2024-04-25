@@ -18,6 +18,8 @@ public class Course implements Serializable, Comparable<Course>{
     private int term;
     private int year;
     private CourseStatus status;
+    private boolean electiveStatus = false;
+    private boolean additionalStatus = false;
 
     public Course(){
         this.code = "N/A";
@@ -26,12 +28,23 @@ public class Course implements Serializable, Comparable<Course>{
         this.prereqs = new Course[1];
     }
 
-    public Course(String code, String title, int year, int term, int units){
+    public Course(String code, String title, int year, int term, int units, boolean electiveStatus, boolean additionalStatus){
         this.code = code;
         this.title = title;
         this.units = units;
         this.year = year;
         this.term = term;
+        this.electiveStatus = electiveStatus;
+        this.additionalStatus = additionalStatus;
+    }
+
+    public Course(String code, String title, int year, int term, int units, boolean electiveStatus){
+        this.code = code;
+        this.title = title;
+        this.units = units;
+        this.year = year;
+        this.term = term;
+        this.electiveStatus = true;
     }
 
     public Course(String code, String title, int units, float grade, Course[] prereqs){
