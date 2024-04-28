@@ -16,27 +16,35 @@ public class CurriculumChecklist {
             System.out.println(course);
         }
 
+        System.out.println();
+        System.out.println();
+        System.out.println();
 
 
-//        try {
-//            ObjectOutputStream fileOut = new ObjectOutputStream(new FileOutputStream("res/test.dat"));
-//            fileOut.writeObject(c);
-//            fileOut.close();
-//
-//            ObjectInputStream fileIn = new ObjectInputStream(new FileInputStream("res/test.dat"));
-//            Course inClass = (Course) fileIn.readObject();
-//            System.out.println(inClass.toString());
-//        } catch (IOException e){
-//            System.out.println(e);
-//        } catch (ClassNotFoundException e) {
-//            throw new RuntimeException(e);
-//        }
+        try {
+            ObjectOutputStream fileOut = new ObjectOutputStream(new FileOutputStream("test.dat"));
+            for(Course course:listOfCourses){
+                fileOut.writeObject(course);
+            }
+
+            fileOut.close();
+
+            ObjectInputStream fileIn = new ObjectInputStream(new FileInputStream("test.dat"));
+            Course inClass = (Course) fileIn.readObject();
+            while(inClass != null){ //Iterate over the .dat file
+                System.out.println(inClass.toString());
+                inClass = (Course) fileIn.readObject();
+            }
+
+        } catch (IOException e){
+            System.out.println(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
-
     public static void readFromTxt(ArrayList<Course> listOfCourses) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\Administrator\\Downloads\\CurriculumChecklist1.txt"));
         String temp = reader.readLine(); //Initialize first line in file
-
         int i = 0;
         while(temp != null){ //Goes through all the texts in the file
             String[] arrOfString;
