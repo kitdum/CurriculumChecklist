@@ -95,6 +95,50 @@ public class Course implements Serializable, Comparable<Course>{
         this.prereqs = prereqs;
     }
 
+    public void setUnits(int units) {
+        this.units = units;
+    }
+
+    public int getTerm() {
+        return term;
+    }
+
+    public void setTerm(int term) {
+        this.term = term;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public CourseStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(CourseStatus status) {
+        this.status = status;
+    }
+
+    public boolean isElectiveStatus() {
+        return electiveStatus;
+    }
+
+    public void setElectiveStatus(boolean electiveStatus) {
+        this.electiveStatus = electiveStatus;
+    }
+
+    public boolean isAdditionalStatus() {
+        return additionalStatus;
+    }
+
+    public void setAdditionalStatus(boolean additionalStatus) {
+        this.additionalStatus = additionalStatus;
+    }
+
     public int compareTo(Course other){
         return this.code.compareTo(other.getCode());
     }

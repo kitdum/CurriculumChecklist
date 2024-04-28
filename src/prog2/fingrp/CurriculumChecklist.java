@@ -19,28 +19,14 @@ public class CurriculumChecklist {
         System.out.println();
         System.out.println();
         System.out.println();
-
-
-        try {
-            ObjectOutputStream fileOut = new ObjectOutputStream(new FileOutputStream("test.dat"));
-            for(Course course:listOfCourses){
-                fileOut.writeObject(course);
-            }
-
-            fileOut.close();
-
-            ObjectInputStream fileIn = new ObjectInputStream(new FileInputStream("test.dat"));
-            Course inClass = (Course) fileIn.readObject();
-            while(inClass != null){ //Iterate over the .dat file
-                System.out.println(inClass.toString());
-                inClass = (Course) fileIn.readObject();
-            }
-
-        } catch (IOException e){
-            System.out.println(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+        try{
+            updateDAT(listOfCourses);
+            readDAT(listOfCourses);
+        }catch (IOException | ClassNotFoundException e){
+            e.printStackTrace();
         }
+
+
     }
     public static void readFromTxt(ArrayList<Course> listOfCourses) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\Administrator\\Downloads\\CurriculumChecklist1.txt"));
@@ -56,5 +42,28 @@ public class CurriculumChecklist {
             i++;
         }
         reader.close();
+    }
+    public static void addToTxt(ArrayList<Course> listOfCourse, Course course) throws IOException {
+        BufferedWriter writer = new BufferedWriter(new FileWriter("C:\\Users\\Administrator\\Downloads\\CurriculumChecklist1.txt",true));
+        writer.write(course.getCode() + "//" + course.getTitle() + "//" + course.getYear() + "//" + course.getTerm() + "//" + course.isElectiveStatus() + "//" + course.isAdditionalStatus());
+        writer.close();
+        listOfCourse.add(course);
+    }
+
+    public static void updateDAT(ArrayList<Course> listOfCourses) throws IOException{
+        ObjectOutputStream fileOut = new ObjectOutputStream(new FileOutputStream("test.dat"));
+        for(Course course:listOfCourses){
+            fileOut.writeObject(course);
+        }
+        fileOut.close();
+    }
+    public static void readDAT(ArrayList<Course> listOfCourses) throws IOException, ClassNotFoundException {
+        ObjectInputStream fileIn = new ObjectInputStream(new FileInputStream("test.dat"));
+        Course inClass = (Course) fileIn.readObject();
+        while(inClass != null) { //Iterate over the .dat file
+            System.out.println(inClass.toString());
+            inClass = (Course) fileIn.readObject();
+        }
+        fileIn.close();
     }
 }
