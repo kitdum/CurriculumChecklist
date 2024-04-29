@@ -1,15 +1,17 @@
 package prog2.fingrp;
+
 import java.io.*;
 import java.util.*;
 
-public class Course implements Serializable, Comparable<Course>{
-    public enum CourseStatus{
+public class Course implements Serializable, Comparable<Course> {
+    public enum STATUS {
         COMPLETE,
         INCOMPLETE,
         NO_FINAL_EXAM,
         WITHDRAWN,
         DROPPED
     }
+
     private String code;
     private String title;
     private int units;
@@ -17,18 +19,18 @@ public class Course implements Serializable, Comparable<Course>{
     private Course[] prereqs;
     private int term;
     private int year;
-    private CourseStatus status;
+    private STATUS status;
     private boolean electiveStatus = false;
     private boolean additionalStatus = false;
 
-    public Course(){
+    public Course() {
         this.code = "N/A";
         this.title = "N/A";
-        this.units = 0;
+        this.units = -1;
         this.prereqs = new Course[1];
     }
 
-    public Course(String code, String title, int year, int term, int units, boolean electiveStatus, boolean additionalStatus){
+    public Course(String code, String title, int year, int term, int units, boolean electiveStatus, boolean additionalStatus) {
         this.code = code;
         this.title = title;
         this.units = units;
@@ -38,21 +40,28 @@ public class Course implements Serializable, Comparable<Course>{
         this.additionalStatus = additionalStatus;
     }
 
-    public Course(String code, String title, int year, int term, int units, boolean electiveStatus){
+    public Course(String code, String title, int year, int term, int units, boolean electiveStatus) {
         this.code = code;
+        this.year = year;
+        this.term = term;
         this.title = title;
         this.units = units;
         this.year = year;
         this.term = term;
-        this.electiveStatus = true;
+        this.electiveStatus = electiveStatus;
     }
 
-    public Course(String code, String title, int units, float grade, Course[] prereqs){
-        this.code = code;
-        this.title = title;
-        this.units = units;
-        this.grade = grade;
+    public Course(String code, String title, int year, int term, int units, Course[] prereqs) {
+        this(code,title,year,term,units);
         this.prereqs = prereqs;
+    }
+
+    public Course(String code, String title, int year, int term, int units) {
+        this.code = code.toUpperCase();
+        this.title = title;
+        this.year = year;
+        this.term = term;
+        this.units = units;
     }
 
     public String getCode() {
@@ -76,7 +85,7 @@ public class Course implements Serializable, Comparable<Course>{
     }
 
     public void setCode(String code) {
-        this.code = code;
+        this.code = code.toUpperCase();
     }
 
     public void setTitle(String title) {
@@ -104,7 +113,10 @@ public class Course implements Serializable, Comparable<Course>{
     }
 
     public void setTerm(int term) {
-        this.term = term;
+        if(term < 1 || term > 3){
+            throw new RuntimeException("Invalid term number");
+        }
+            this.term = term;
     }
 
     public int getYear() {
@@ -115,35 +127,38 @@ public class Course implements Serializable, Comparable<Course>{
         this.year = year;
     }
 
-    public CourseStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(CourseStatus status) {
-        this.status = status;
-    }
-
-    public boolean isElectiveStatus() {
+    public boolean isElective() {
         return electiveStatus;
     }
 
-    public void setElectiveStatus(boolean electiveStatus) {
+    public void setElective(boolean electiveStatus) {
         this.electiveStatus = electiveStatus;
     }
 
-    public boolean isAdditionalStatus() {
+    public boolean isAdditional() {
         return additionalStatus;
     }
 
-    public void setAdditionalStatus(boolean additionalStatus) {
+    public void setAdditional(boolean additionalStatus) {
         this.additionalStatus = additionalStatus;
     }
 
-    public int compareTo(Course other){
+    public void setStatus(STATUS status) {
+        this.status = status;
+    }
+
+    public STATUS getStatus() {
+        return status;
+    }
+
+    //Default sorting order is based on course code
+    public int compareTo(Course other) {
         return this.code.compareTo(other.getCode());
     }
 
-    public String toString(){
-        return String.format("%s | %s",code,title);
+    public String toString() {
+        return String.format("%s | %s | Year: %d | Term: %d | Grade: %f", code, title,year,term,grade);
     }
+
+
 }
