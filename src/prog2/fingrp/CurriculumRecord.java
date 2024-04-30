@@ -21,6 +21,15 @@ public class CurriculumRecord {
         Course data = new Course("CS122","God died for our sins",-1,-1,-1);
         data.setGrade(50);
         personalRecord.add(data);
+        data = new Course("CS111", "AAAAAAAAA",-1,-1,-1);
+        data.setGrade(95);
+        personalRecord.add(data);
+        data = new Course("CS212", "AAAAsdas",-1,-1,-1);
+        data.setGrade(80);
+        personalRecord.add(data);
+        data = new Course("CS212", "Baba",-1,-1,-1);
+        data.setGrade(75);
+        personalRecord.add(data);
 
         compiledRecord = this.templateRecord;
         recompileRecord();
@@ -40,58 +49,34 @@ public class CurriculumRecord {
         this.personalRecord = new ArrayList<Course>();
 
         compiledRecord = this.templateRecord;
+
         recompileRecord();
     }
 
     private void recompileRecord() {
-        personalRecord.parallelStream()
-                .forEach(
-                        personalData -> {
-                            Optional<Course> replacement = compiledRecord.stream()
-                                    .filter(
-                                            course ->
-                                                    personalData.getCode().equals(course.getCode())
-                                    ).findFirst();
+        for (Course personalData :
+                personalRecord) {
+            for (Course courseData :
+                    compiledRecord) {
+                if (courseData.getCode().equals(personalData.getCode())) {
+                    if(personalData.getUnits() > 0)
+                        courseData.setUnits(personalData.getUnits());
+                    if(!personalData.getTitle().isBlank())
+                        courseData.setTitle(personalData.getTitle());
+                    if(personalData.getGrade() >= 0)
+                        courseData.setGrade(personalData.getGrade());
+                    if(personalData.getTerm() > 0)
+                        courseData.setTerm(personalData.getTerm());
+                    if(personalData.getYear() > 0)
+                    courseData.setYear(personalData.getYear());
 
-                            //Find a match in existing compiled record
-                            if (replacement.isPresent()) {
-                                Course courseReference = replacement.get();
-                                if(personalData.getUnits() > 0)
-                                    courseReference.setUnits(personalData.getUnits());
-                                if (!personalData.getTitle().isBlank())
-                                    courseReference.setTitle(personalData.getTitle());
-                                if (personalData.getGrade() >= 0)
-                                    courseReference.setGrade(personalData.getGrade());
-                                if (personalData.getTerm() > 0)
-                                    courseReference.setTerm(personalData.getTerm());
-                                if (personalData.getYear() > 0)
-                                    courseReference.setYear(personalData.getYear());
-                            }
-
-                        }
-                );
-
-//        for (Course personalData :
-//                personalRecord) {
-//            for (Course courseData :
-//                    compiledRecord) {
-//                if (courseData.getCode().equals(personalData.getCode())) {
-//                    if(personalData.getUnits() > 0)
-//                        courseData.setUnits(personalData.getUnits());
-//                    if(!personalData.getTitle().isBlank())
-//                        courseData.setTitle(personalData.getTitle());
-//                    if(personalData.getGrade() >= 0)
-//                        courseData.setGrade(personalData.getGrade());
-//                    if(personalData.getTerm() > 0)
-//                        courseData.setTerm(personalData.getTerm());
-//                    if(personalData.getYear() > 0)
-//                    courseData.setYear(personalData.getYear());
-//
-//                    //First match found. Consider it done.
-//                    break;
-//                }
-//            }
-//        }
+                    //First match found. Consider it done.
+                    break;
+                }
+                //No match found, add data to compiled record.
+                compiledRecord.add(personalData);
+            }
+        }
     }
 
     public ArrayList<Course> getCourseList() {
@@ -104,11 +89,6 @@ public class CurriculumRecord {
     }
 
     public void editCourse(String courseCode, Course courseData) {
-
-
-    }
-
-    private void findFirst(){
 
     }
 }
