@@ -9,59 +9,30 @@ public class Course implements Serializable, Comparable<Course> {
         INCOMPLETE,
         NO_FINAL_EXAM,
         WITHDRAWN,
-        DROPPED
+        DROPPED,
+        UNTAKEN
     }
 
-    private String code;
-    private String title;
-    private int units;
-    private float grade;
-    private Course[] prereqs;
-    private int term;
-    private int year;
-    private STATUS status;
+    private String code = "N/A";
+    private String title = "N/A";
+    private int units, term, year = 0;
+    private float grade = 0;
+    private Course[] prereqs = new Course[1];
+    private STATUS status = STATUS.UNTAKEN;
     private boolean electiveStatus = false;
     private boolean additionalStatus = false;
 
-    public Course() {
-        this.code = "N/A";
-        this.title = "N/A";
-        this.units = -1;
-        this.prereqs = new Course[1];
-    }
-
-    public Course(String code, String title, int year, int term, int units, boolean electiveStatus, boolean additionalStatus) {
-        this.code = code;
-        this.title = title;
-        this.units = units;
-        this.year = year;
-        this.term = term;
-        this.electiveStatus = electiveStatus;
-        this.additionalStatus = additionalStatus;
-    }
-
-    public Course(String code, String title, int year, int term, int units, boolean electiveStatus) {
-        this.code = code;
-        this.year = year;
-        this.term = term;
-        this.title = title;
-        this.units = units;
-        this.year = year;
-        this.term = term;
-        this.electiveStatus = electiveStatus;
-    }
-
-    public Course(String code, String title, int year, int term, int units, Course[] prereqs) {
-        this(code,title,year,term,units);
-        this.prereqs = prereqs;
-    }
-
-    public Course(String code, String title, int year, int term, int units) {
-        this.code = code.toUpperCase();
-        this.title = title;
-        this.year = year;
-        this.term = term;
-        this.units = units;
+    public Course(CourseBuilder builder) {
+        this.code = builder.code;
+        this.title = builder.title;
+        this.units = builder.units;
+        this.year = builder.year;
+        this.term = builder.term;
+        this.grade = builder.grade;
+        this.prereqs = builder.prereqs;
+        this.status = builder.status;
+        this.electiveStatus = builder.electiveStatus;
+        this.additionalStatus = builder.additionalStatus;
     }
 
     public String getCode() {
@@ -182,13 +153,69 @@ public class Course implements Serializable, Comparable<Course> {
         return this.code.compareTo(other.getCode());
     }
 
-    public boolean equals(Course other){
-        return this.code.equals(other.getCode());
-    }
-
     public String toString() {
         return String.format("%s | %s | Year: %d | Term: %d | Grade: %f", getCode(), getTitle(),getYear(),getTerm(),getGrade());
     }
 
+    //This code makes me want to spill someone's guts.
+    public static class CourseBuilder {
+        private String code;
+        private String title = "";
+        private int units, term, year = -1;
+        private float grade = -1;
+        private Course[] prereqs = new Course[1];
+        private STATUS status = STATUS.UNTAKEN;
+        private boolean electiveStatus = false;
+        private boolean additionalStatus = false;
 
+        CourseBuilder(String code) {
+            this.code = code;
+        }
+
+        public CourseBuilder title(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public CourseBuilder units(int units) {
+            this.units = units;
+            return this;
+        }
+
+        public CourseBuilder grade(float grade) {
+            this.grade = grade;
+            return this;
+        }
+
+        public CourseBuilder term(int term) {
+            this.term = term;
+            return this;
+        }
+
+        public CourseBuilder year(int year) {
+            this.year = year;
+            return this;
+        }
+
+        public CourseBuilder prereqs(Course[] prereqs) {
+            this.prereqs = prereqs;
+            return this;
+        }
+
+        public CourseBuilder status(STATUS status) {
+            this.status = status;
+            return this;
+        }
+
+        public CourseBuilder electiveStatus(boolean electiveStatus) {
+            this.electiveStatus = electiveStatus;
+            return this;
+        }
+
+        public CourseBuilder additionalStatus(boolean additionalStatus) {
+            this.additionalStatus = additionalStatus;
+            return this;
+        }
+
+    }
 }

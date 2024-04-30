@@ -13,6 +13,8 @@ public class CurriculumRecord {
         this.templateRecord = (ArrayList<Course>) new ObjectInputStream(templateRecord).readObject();
         this.personalRecord = (ArrayList<Course>) new ObjectInputStream(personalRecord).readObject();
 
+        templateRecord.close();
+        personalRecord.close();
         compiledRecord = this.templateRecord;
         recompileRecord();
     }
@@ -22,6 +24,8 @@ public class CurriculumRecord {
         this.personalRecord = new ArrayList<Course>();
 
         compiledRecord = this.templateRecord;
+
+        templateRecord.close();
 
         recompileRecord();
     }
@@ -40,6 +44,8 @@ public class CurriculumRecord {
                     //First match found. Consider it done.
                     continue personalLoop;
                 }
+                //No match found, add data to compiled record.
+                compiledRecord.add(personalData);
             }
             coursesToAdd.add(personalData);
         }
@@ -51,9 +57,11 @@ public class CurriculumRecord {
         return compiledRecord;
     }
 
+    //Saving file only outputs files.
     public void saveChanges(OutputStream out) throws IOException {
         ObjectOutputStream outputFile = new ObjectOutputStream(out);
         outputFile.writeObject(personalRecord);
+        out.close();
     }
 
     public void editCourse(Course courseData) {
