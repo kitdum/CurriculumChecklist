@@ -172,11 +172,18 @@ public class Course implements Serializable, Comparable<Course> {
             this.setTerm(source.getTerm());
         if(source.getYear() > 0)
             this.setYear(source.getYear());
+        if(source.isElective() != electiveStatus){
+            this.setElective(source.isElective());
+        }
     }
 
     //Default sorting order is based on course code
     public int compareTo(Course other) {
         return this.code.compareTo(other.getCode());
+    }
+
+    public boolean equals(Course other){
+        return this.code.equals(other.getCode());
     }
 
     public String toString() {

@@ -39,9 +39,19 @@ public class DevTest {
             System.out.println(course);
         }
 
-        //Sort test.
-
         //Edit test
+        System.out.println("-----");
+        System.out.println("Editing CS 111");
+        System.out.println("-----");
+        record.editCourse(new Course("CS 111", "Test edit", 1,1,3));
+        record.editCourse(new Course("CSE 1", "Elective edit test",4,1,3,false));
+        record.editCourse(new Course("ADD 1", "Additional course test",5,1,3,false));
+
+        for(Course course: record.getCourseList()){
+            System.out.println(course);
+        }
+
+        //Sort test.
 
 
     }

@@ -27,19 +27,24 @@ public class CurriculumRecord {
     }
 
     private void recompileRecord() {
-        for (Course personalData :
+        //Can't modify data in collection while looping so store it here in the meantime.
+        ArrayList<Course> coursesToAdd = new ArrayList<Course>();
+
+
+        personalLoop: for (Course personalData :
                 personalRecord) {
             for (Course courseData :
                     compiledRecord) {
-                if (courseData.getCode().equals(personalData.getCode())) {
+                if (courseData.equals(personalData)) {
                     courseData.mergeData(personalData);
                     //First match found. Consider it done.
-                    break;
+                    continue personalLoop;
                 }
-                //No match found, add data to compiled record.
-                compiledRecord.add(personalData);
             }
+            coursesToAdd.add(personalData);
         }
+
+        compiledRecord.addAll(coursesToAdd);
     }
 
     public ArrayList<Course> getCourseList() {
@@ -51,7 +56,15 @@ public class CurriculumRecord {
         outputFile.writeObject(personalRecord);
     }
 
-    public void editCourse(String courseCode, Course courseData) {
+    public void editCourse(Course courseData) {
+        for(Course personalData: personalRecord){
+            if (courseData.equals(personalData)){
+                personalData.mergeData(courseData);
+                return;
+            }
+        }
+        personalRecord.add(courseData);
 
+        recompileRecord();
     }
 }
