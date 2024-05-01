@@ -37,7 +37,7 @@ public class CurriculumChecklist {
         while(temp != null){ //Goes through all the texts in the file
             String[] arrOfString;
             arrOfString = temp.split("/"); //Splits strings and places it in the array
-            Course course = new Course(arrOfString[0],arrOfString[1],Integer.parseInt(arrOfString[2]),Integer.parseInt(arrOfString[3]),Integer.parseInt(arrOfString[4]), Boolean.parseBoolean(arrOfString[5]), Boolean.parseBoolean(arrOfString[6])); //Creates a Song class with the previously created array list
+            Course course = new Course(new Course.CourseBuilder("111")); //Creates a Song class with the previously created array list
             listOfCourses.add(course); //Assigns the instance of that class into the listOfSongs
 
             temp = reader.readLine(); //Updates the line -- moving to the next line

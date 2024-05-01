@@ -32,7 +32,7 @@ public class CurriculumRecord {
 
     private void recompileRecord() {
         //Can't modify data in collection while looping so store it here in the meantime.
-        ArrayList<Course> coursesToAdd = new ArrayList<Course>();
+        ArrayList<Course> coursesToAdd = new ArrayList<>();
 
 
         personalLoop: for (Course personalData :
@@ -44,8 +44,6 @@ public class CurriculumRecord {
                     //First match found. Consider it done.
                     continue personalLoop;
                 }
-                //No match found, add data to compiled record.
-                compiledRecord.add(personalData);
             }
             coursesToAdd.add(personalData);
         }

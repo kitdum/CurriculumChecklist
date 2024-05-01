@@ -43,9 +43,22 @@ public class DevTest {
         System.out.println("-----");
         System.out.println("Editing CS 111");
         System.out.println("-----");
-        record.editCourse(new Course("CS 111", "Test edit", 1,1,3));
-        record.editCourse(new Course("CSE 1", "Elective edit test",4,1,3,false));
-        record.editCourse(new Course("ADD 1", "Additional course test",5,1,3,false));
+        record.editCourse(new Course(new Course.CourseBuilder("CS 111")
+                .title("Edit test 1")
+                .grade(85)
+        ));
+
+        record.editCourse(new Course(new Course.CourseBuilder("CSE 1")
+                .title("Elective edit test")
+                .grade(85)
+        ));
+        record.editCourse(new Course(new Course.CourseBuilder("ADD 1")
+                .title("Additional course test")
+                .units(3)
+                .year(3)
+                .term(1)
+                .grade(90)
+        ));
 
         for(Course course: record.getCourseList()){
             System.out.println(course);
@@ -61,14 +74,12 @@ public class DevTest {
         try (Scanner file = new Scanner(new FileInputStream(templateLoc))) {
             while (file.hasNextLine()) {
                 String[] in = file.nextLine().split("/");
-                templateList.add(new Course(
-                        in[0],
-                        in[1],
-                        Integer.parseInt(in[3]),
-                        Integer.parseInt(in[4]),
-                        Integer.parseInt(in[2]),
-                        Boolean.parseBoolean(in[5]),
-                        false
+                templateList.add(new Course(new Course.CourseBuilder(in[0])
+                        .title(in[1])
+                        .units(Integer.parseInt(in[2]))
+                        .year(Integer.parseInt(in[3]))
+                        .term(Integer.parseInt(in[4]))
+                        .electiveStatus(Boolean.parseBoolean(in[5]))
                 ));
             }
         } catch (IOException e) {
