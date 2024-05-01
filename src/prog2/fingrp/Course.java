@@ -161,6 +161,19 @@ public class Course implements Serializable, Comparable<Course> {
         return status;
     }
 
+    public void mergeData(Course source){
+        if(source.getUnits() > 0)
+            this.setUnits(source.getUnits());
+        if(!source.getTitle().isBlank())
+            this.setTitle(source.getTitle());
+        if(source.getGrade() >= 0)
+            this.setGrade(source.getGrade());
+        if(source.getTerm() > 0)
+            this.setTerm(source.getTerm());
+        if(source.getYear() > 0)
+            this.setYear(source.getYear());
+    }
+
     //Default sorting order is based on course code
     public int compareTo(Course other) {
         return this.code.compareTo(other.getCode());

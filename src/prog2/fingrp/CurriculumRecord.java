@@ -32,17 +32,7 @@ public class CurriculumRecord {
             for (Course courseData :
                     compiledRecord) {
                 if (courseData.getCode().equals(personalData.getCode())) {
-                    if(personalData.getUnits() > 0)
-                        courseData.setUnits(personalData.getUnits());
-                    if(!personalData.getTitle().isBlank())
-                        courseData.setTitle(personalData.getTitle());
-                    if(personalData.getGrade() >= 0)
-                        courseData.setGrade(personalData.getGrade());
-                    if(personalData.getTerm() > 0)
-                        courseData.setTerm(personalData.getTerm());
-                    if(personalData.getYear() > 0)
-                    courseData.setYear(personalData.getYear());
-
+                    courseData.mergeData(personalData);
                     //First match found. Consider it done.
                     break;
                 }
