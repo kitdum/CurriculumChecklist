@@ -65,11 +65,21 @@ public class Course implements Serializable, Comparable<Course> {
     }
 
     public String getCode() {
-        return code;
+        if (!electiveStatus || status == STATUS.COMPLETE) {
+            //If not elective or is an elective and complete
+            return code;
+        } else{
+            //If is elective and not complete.
+            return code.replaceAll("\s?[0-9]$","");
+        }
     }
 
     public String getTitle() {
-        return title;
+        if (!electiveStatus || status == STATUS.INCOMPLETE) {
+            return title;
+        } else{
+            return "ELECTIVE";
+        }
     }
 
     public int getUnits() {
@@ -157,7 +167,7 @@ public class Course implements Serializable, Comparable<Course> {
     }
 
     public String toString() {
-        return String.format("%s | %s | Year: %d | Term: %d | Grade: %f", code, title,year,term,grade);
+        return String.format("%s | %s | Year: %d | Term: %d | Grade: %f", getCode(), getTitle(),getYear(),getTerm(),getGrade());
     }
 
 
