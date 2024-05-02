@@ -66,6 +66,7 @@ public class CurriculumRecord {
         for(Course personalData: personalRecord){
             if (courseData.equals(personalData)){
                 personalData.mergeData(courseData);
+                recompileRecord();
                 return;
             }
         }
