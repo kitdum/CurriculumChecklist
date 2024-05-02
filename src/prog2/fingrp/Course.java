@@ -3,6 +3,11 @@ package prog2.fingrp;
 import java.io.*;
 import java.util.*;
 
+/**
+ * IMPORTANT NOTE:
+ * Creating a course requires you to use a CourseBuilder class to allow optional parameters
+ * without needing multiple constructors for each parameter.
+ */
 public class Course implements Serializable, Comparable<Course> {
     public enum STATUS {
         COMPLETE,
@@ -40,7 +45,7 @@ public class Course implements Serializable, Comparable<Course> {
             //If not elective or is an elective and complete
             return code;
         } else{
-            //If is elective and not complete.
+            //If is elective and not complete, change code to have no number component.
             return code.replaceAll("\s?[0-9]$","");
         }
     }
@@ -143,7 +148,7 @@ public class Course implements Serializable, Comparable<Course> {
             this.setTerm(source.term);
         if(source.getYear() > 0)
             this.setYear(source.year);
-        if(source.isElective() != electiveStatus){
+        if(source.isElective() != electiveStatus){ //Find better way to handle elective status
             this.setElective(source.electiveStatus);
         }
     }

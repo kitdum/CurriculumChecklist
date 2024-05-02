@@ -71,7 +71,8 @@ public class DevTest {
         }
 
         //Sort test.
-        //Implement sorting as part of CurriculumRecord functions?
+        //For ease of filtering and sorting use Aggregate Operations on stream. Refer to Java docs.
+        //Move filtering and sorting functionality to CurriculumRecord class.
         System.out.println("------\nSorting by Grade (Descending)\n-----");
         for(Course course: record.getCourseList().stream()
                 .filter(e -> e.getGrade() > 0)
