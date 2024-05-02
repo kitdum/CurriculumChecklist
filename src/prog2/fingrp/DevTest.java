@@ -11,7 +11,8 @@ public class DevTest {
         generateTemplate("res/CurriculumTemplate.txt");
 
         try{
-            record = new CurriculumRecord(new FileInputStream("res/CS_template.dat"));
+            record = new CurriculumRecord(new FileInputStream("res/CS_template.dat"),
+                    new FileInputStream("res/record.dat"));
         } catch (IOException e){
             System.out.println("Error accessing curriculum template file");
             e.printStackTrace();
@@ -43,21 +44,15 @@ public class DevTest {
         System.out.println("-----");
         System.out.println("Editing CS 111");
         System.out.println("-----");
-        record.editCourse(new Course(new Course.CourseBuilder("CS 111")
-                .title("Edit test 1")
-                .grade(85)
-        ));
+        try (FileOutputStream file = new FileOutputStream("res/record.dat")) {
+            record.saveChanges(file);
+        } catch (IOException e){
+            System.out.println("Error accessing file.");
+        }
 
         record.editCourse(new Course(new Course.CourseBuilder("CSE 1")
                 .title("Elective edit test")
-                .grade(85)
-        ));
-        record.editCourse(new Course(new Course.CourseBuilder("ADD 1")
-                .title("Additional course test")
-                .units(3)
-                .year(3)
-                .term(1)
-                .grade(90)
+                .grade(91)
         ));
 
         for(Course course: record.getCourseList()){
@@ -65,6 +60,17 @@ public class DevTest {
         }
 
         //Sort test.
+        //Implement sorting as part of CurriculumRecord functions?
+        System.out.println("------\nSorting by Grade (Descending)\n-----");
+        for(Course course: record.getCourseList().stream()
+                .filter(e -> e.getGrade() > 0)
+                .sorted((o1,o2) -> {
+                    //If result is negative, returns o1.
+                    //If result is positive returns o2.
+                    return (int) (o1.getGrade() - o2.getGrade());
+                }).toList()
+        )
+            System.out.println(course);
 
 
     }
