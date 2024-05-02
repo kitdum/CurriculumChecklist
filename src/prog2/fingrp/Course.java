@@ -158,7 +158,8 @@ public class Course implements Serializable, Comparable<Course> {
     }
 
     public String toString() {
-        return String.format("%s | %s | Year: %d | Term: %d | Grade: %f", getCode(), getTitle(),getYear(),getTerm(),getGrade());
+        String addStatus = isAdditional() ? "True" : "False";
+        return String.format("%s | %s | Year: %d | Term: %d | Grade: %f | Additional: %s", getCode(), getTitle(),getYear(),getTerm(),getGrade(), addStatus);
     }
 
     //This code makes me want to spill someone's guts.

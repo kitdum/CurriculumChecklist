@@ -6,21 +6,22 @@ import java.io.*;
 //THIS IS A DEVELOPMENT CLASS. REMOVE AFTER USE.
 public class DevTest {
     public static void main(String[] args) {
-        CurriculumRecord record;
+        CurriculumRecord record = null;
+        File template = new File("res/CS_template.dat");
+        File save = new File("res/record.dat");
 
-        generateTemplate("res/CurriculumTemplate.txt");
+        generateTemplate(new File("res/CurriculumTemplate.txt"));
 
-        try{
-            record = new CurriculumRecord(new FileInputStream("res/CS_template.dat"),
-                    new FileInputStream("res/record.dat"));
+        try {
+            if (save.exists()) {
+                record = new CurriculumRecord(new FileInputStream(template), new FileInputStream(save));
+            } else {
+                record = new CurriculumRecord(new FileInputStream(template));
+            }
         } catch (IOException e){
-            System.out.println("Error accessing curriculum template file");
-            e.printStackTrace();
-            return;
+            System.out.println("Error accessing file.");
         } catch (ClassNotFoundException e){
-            System.out.println("Error processing curriculum template file\nFile may not be invalid or corrupted");
-            e.printStackTrace();
-            return;
+            System.out.println("Error processing file.");
         }
 
         //Print out record test
@@ -44,6 +45,16 @@ public class DevTest {
         System.out.println("-----");
         System.out.println("Editing CS 111");
         System.out.println("-----");
+        record.editCourse(new Course(new Course.CourseBuilder("CS 111")
+                .title("Edit Test 1")
+                .grade(75)
+        ));
+
+        record.editCourse(new Course(new Course.CourseBuilder("ADD1")
+                .title("Additional Test 1")
+                .grade(80)
+        ));
+
         try (FileOutputStream file = new FileOutputStream("res/record.dat")) {
             record.saveChanges(file);
         } catch (IOException e){
@@ -75,7 +86,7 @@ public class DevTest {
 
     }
 
-    static void generateTemplate(String templateLoc) {
+    static void generateTemplate(File templateLoc) {
         ArrayList<Course> templateList = new ArrayList<Course>();
         try (Scanner file = new Scanner(new FileInputStream(templateLoc))) {
             while (file.hasNextLine()) {
