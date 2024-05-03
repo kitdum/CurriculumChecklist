@@ -15,54 +15,45 @@ public class Course implements Serializable, Comparable<Course> {
         NO_FINAL_EXAM,
         WITHDRAWN,
         DROPPED,
-        UNTAKEN
+        NOT_TAKEN
     }
 
-    private String code = "N/A";
+    private String code;
     private String title = "N/A";
-    private int units, term, year = 0;
-    private float grade = 0;
-    private Course[] prereqs = new Course[1];
-    private STATUS status = STATUS.UNTAKEN;
-    private boolean electiveStatus = false;
-    private boolean additionalStatus = false;
+    private Integer units, term, year = 0;
+    private Float grade = 0f;
+    private Course[] prereqs;
+    private STATUS status = STATUS.NOT_TAKEN;
+    private Boolean electiveStatus = false;
+    private Boolean additionalStatus = false;
 
     public Course(CourseBuilder builder) {
-        this.code = builder.code;
-        this.title = builder.title;
-        this.units = builder.units;
-        this.year = builder.year;
-        this.term = builder.term;
-        this.grade = builder.grade;
-        this.prereqs = builder.prereqs;
-        this.status = builder.status;
-        this.electiveStatus = builder.electiveStatus;
-        this.additionalStatus = builder.additionalStatus;
+        mergeData(builder);
     }
 
     public String getCode() {
         if (!electiveStatus || status == STATUS.COMPLETE) {
             //If not elective or is an elective and complete
             return code;
-        } else{
+        } else {
             //If is elective and not complete, change code to have no number component.
-            return code.replaceAll("\s?[0-9]$","");
+            return code.replaceAll("\s?[0-9]$", "");
         }
     }
 
     public String getTitle() {
         if (!electiveStatus || status == STATUS.INCOMPLETE) {
             return title;
-        } else{
+        } else {
             return "ELECTIVE";
         }
     }
 
-    public int getUnits() {
+    public Integer getUnits() {
         return units;
     }
 
-    public float getGrade() {
+    public Float getGrade() {
         return grade;
     }
 
@@ -78,7 +69,7 @@ public class Course implements Serializable, Comparable<Course> {
         this.title = title;
     }
 
-    public void setUnits(short units) {
+    public void setUnits(int units) {
         this.units = units;
     }
 
@@ -90,22 +81,18 @@ public class Course implements Serializable, Comparable<Course> {
         this.prereqs = prereqs;
     }
 
-    public void setUnits(int units) {
-        this.units = units;
-    }
-
-    public int getTerm() {
+    public Integer getTerm() {
         return term;
     }
 
     public void setTerm(int term) {
-        if(term < 1 || term > 3){
+        if (term < 1 || term > 3) {
             throw new RuntimeException("Invalid term number");
         }
-            this.term = term;
+        this.term = term;
     }
 
-    public int getYear() {
+    public Integer getYear() {
         return year;
     }
 
@@ -113,7 +100,7 @@ public class Course implements Serializable, Comparable<Course> {
         this.year = year;
     }
 
-    public boolean isElective() {
+    public Boolean isElective() {
         return electiveStatus;
     }
 
@@ -121,7 +108,7 @@ public class Course implements Serializable, Comparable<Course> {
         this.electiveStatus = electiveStatus;
     }
 
-    public boolean isAdditional() {
+    public Boolean isAdditional() {
         return additionalStatus;
     }
 
@@ -137,20 +124,38 @@ public class Course implements Serializable, Comparable<Course> {
         return status;
     }
 
-    public void mergeData(Course source){
-        if(source.getUnits() > 0)
+    public void mergeData(CourseBuilder source) {
+        if (source.code != null)
+            this.setCode(source.code);
+        if (source.units != null)
             this.setUnits(source.units);
-        if(!source.getTitle().isBlank())
+        if (source.title != null)
             this.setTitle(source.title);
-        if(source.getGrade() >= 0)
+        if (source.grade != null)
             this.setGrade(source.grade);
-        if(source.getTerm() > 0)
+        if (source.term != null)
             this.setTerm(source.term);
-        if(source.getYear() > 0)
+        if (source.year != null)
             this.setYear(source.year);
-        if(source.isElective() != electiveStatus){ //Find better way to handle elective status
+        if (source.electiveStatus != null)
             this.setElective(source.electiveStatus);
-        }
+    }
+
+    public void mergeData(Course source) {
+        if (source.getCode() != null)
+            this.setCode(source.code);
+        if (source.getUnits() != null)
+            this.setUnits(source.units);
+        if (source.getTitle() != null)
+            this.setTitle(source.title);
+        if (source.getGrade() != null)
+            this.setGrade(source.grade);
+        if (source.getTerm() != null)
+            this.setTerm(source.term);
+        if (source.getYear() != null)
+            this.setYear(source.year);
+        if (source.isElective() != null)
+            this.setElective(source.electiveStatus);
     }
 
     //Default sorting order is based on course code
@@ -164,19 +169,21 @@ public class Course implements Serializable, Comparable<Course> {
 
     public String toString() {
         String addStatus = isAdditional() ? "True" : "False";
-        return String.format("%s | %s | Year: %d | Term: %d | Grade: %f | Additional: %s", getCode(), getTitle(),getYear(),getTerm(),getGrade(), addStatus);
+        String elecStatus = isElective() ? "True" : "False";
+        return String.format("%s | %s | Year: %d | Term: %d | Grade: %f | Elective: %s | Additional: %s",
+                getCode(), getTitle(), getYear(), getTerm(), getGrade(), elecStatus, addStatus);
     }
 
     //This code makes me want to spill someone's guts.
     public static class CourseBuilder {
         private String code;
-        private String title = "";
-        private int units, term, year = -1;
-        private float grade = -1;
-        private Course[] prereqs = new Course[1];
-        private STATUS status = STATUS.UNTAKEN;
-        private boolean electiveStatus = false;
-        private boolean additionalStatus = false;
+        private String title;
+        private Integer units, term, year;
+        private Float grade;
+        private Course[] prereqs;
+        private STATUS status = STATUS.NOT_TAKEN;
+        private Boolean electiveStatus;
+        private Boolean additionalStatus;
 
         CourseBuilder(String code) {
             this.code = code;
