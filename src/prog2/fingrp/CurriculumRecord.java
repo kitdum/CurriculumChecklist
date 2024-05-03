@@ -65,11 +65,11 @@ public class CurriculumRecord {
         out.close();
     }
 
-    public void editCourse(Course courseData) {
+    public void editCourse(String courseCode, Course.CourseBuilder courseData) {
         //Edit or add to compiled list of courses
         boolean matchFound = false;
         for (Course outputCourse:compiledRecord){
-            if (outputCourse.equals(courseData)){
+            if (outputCourse.getCode().equals(courseCode)){
                 outputCourse.mergeData(courseData);
                 matchFound = true;
                 break;
@@ -80,13 +80,16 @@ public class CurriculumRecord {
         if (!matchFound)
         {
             //Assume it is additional if first time being added after adding template record files.
-            courseData.setAdditional(true);
-            compiledRecord.add(courseData);
+            courseData.additionalStatus(true);
+            compiledRecord.add(new Course(courseData));
+            personalRecord.add(new Course(courseData));
+            return;
         }
 
+        //Check if course exists in already edited courses.
         matchFound = false;
         for(Course personalData: personalRecord){
-            if (courseData.equals(personalData)) {
+            if (personalData.getCode().equals(courseCode)) {
                 personalData.mergeData(courseData);
                 matchFound = true;
                 break;
