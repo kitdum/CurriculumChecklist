@@ -33,6 +33,10 @@ public class Course implements Serializable, Comparable<Course> {
     }
 
     public String getCode() {
+        return code;
+    }
+
+    public String getDisplayCode() {
         if (!electiveStatus || status == STATUS.COMPLETE) {
             //If not elective or is an elective and complete
             return code;
@@ -173,6 +177,10 @@ public class Course implements Serializable, Comparable<Course> {
     }
 
     public boolean equals(Course other) {
+        return this.code.equals(other.code);
+    }
+
+    public boolean equals(CourseBuilder other) {
         return this.code.equals(other.code);
     }
 
