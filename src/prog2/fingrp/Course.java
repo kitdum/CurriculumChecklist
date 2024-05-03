@@ -11,9 +11,8 @@ import java.util.*;
 public class Course implements Serializable, Comparable<Course> {
     public enum STATUS {
         COMPLETE,
-        INCOMPLETE,
-        NO_FINAL_EXAM,
-        WITHDRAWN,
+        NO_CREDIT,
+        WITHDRAWL_WITH_PERMISSION,
         DROPPED,
         NOT_TAKEN
     }
