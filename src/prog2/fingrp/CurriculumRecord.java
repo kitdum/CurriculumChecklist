@@ -95,6 +95,27 @@ public class CurriculumRecord {
                 break;
             }
         }
-        if (!matchFound) personalRecord.add(courseData);
+        if (!matchFound) personalRecord.add(new Course(courseData));
+    }
+
+    //INCOMPLETE
+    public ArrayList<Course> FilterByYearAndTerm(int year, int term){
+        return compiledRecord;
+    }
+
+    public ArrayList<Course> FilterByCurriculum(boolean addtionalOnly){
+        return compiledRecord;
+    }
+
+    public ArrayList<Course> SortByGrade(boolean descending){
+        return compiledRecord;
+    }
+
+    public ArrayList<Course> SortByGPA(boolean descending){
+        return compiledRecord;
+    }
+
+    public ArrayList<Course> SortByTitle(boolean descending){
+        return compiledRecord;
     }
 }
