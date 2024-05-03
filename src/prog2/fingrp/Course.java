@@ -17,11 +17,13 @@ public class Course implements Serializable, Comparable<Course> {
         NOT_TAKEN
     }
 
-    private String code;
+    private String code = "N/A";
     private String title = "N/A";
-    private Integer units, term, year = 0;
+    private Integer units = 0,
+            term = 0,
+            year = 0;
     private Float grade = 0f;
-    private Course[] prereqs;
+    private Course[] prereqs = new Course[0];
     private STATUS status = STATUS.NOT_TAKEN;
     private Boolean electiveStatus = false;
     private Boolean additionalStatus = false;
@@ -41,7 +43,7 @@ public class Course implements Serializable, Comparable<Course> {
     }
 
     public String getTitle() {
-        if (!electiveStatus || status == STATUS.INCOMPLETE) {
+        if (!electiveStatus || status == STATUS.COMPLETE) {
             return title;
         } else {
             return "ELECTIVE";
@@ -138,6 +140,10 @@ public class Course implements Serializable, Comparable<Course> {
             this.setYear(source.year);
         if (source.electiveStatus != null)
             this.setElective(source.electiveStatus);
+        if (source.additionalStatus != null)
+            this.setAdditional(source.additionalStatus);
+        if (source.status != null)
+            this.setStatus(source.status);
     }
 
     public void mergeData(Course source) {
@@ -155,6 +161,10 @@ public class Course implements Serializable, Comparable<Course> {
             this.setYear(source.year);
         if (source.isElective() != null)
             this.setElective(source.electiveStatus);
+        if (source.isAdditional() != null)
+            this.setAdditional(source.additionalStatus);
+        if (source.status != null)
+            this.setStatus(source.status);
     }
 
     //Default sorting order is based on course code
@@ -167,10 +177,15 @@ public class Course implements Serializable, Comparable<Course> {
     }
 
     public String toString() {
-        String addStatus = isAdditional() ? "True" : "False";
-        String elecStatus = isElective() ? "True" : "False";
-        return String.format("%s | %s | Year: %d | Term: %d | Grade: %f | Elective: %s | Additional: %s",
-                getCode(), getTitle(), getYear(), getTerm(), getGrade(), elecStatus, addStatus);
+        String status = "";
+        switch (this.status) {
+            case COMPLETE -> status = String.format("%.2f", grade);
+            case NO_CREDIT -> status = "NC";
+            case DROPPED -> status = "D";
+            case WITHDRAWL_WITH_PERMISSION -> status = "WP";
+        }
+        return String.format("%-8.8s | %-20.20s | Year: %-1d | Term: %-1d | Grade/Status: %-4s | Elective: %-5b | Additional: %-5b",
+                getDisplayCode(), getTitle(), getYear(), getTerm(), status, electiveStatus, additionalStatus);
     }
 
     //This code makes me want to spill someone's guts.
@@ -180,12 +195,13 @@ public class Course implements Serializable, Comparable<Course> {
         private Integer units, term, year;
         private Float grade;
         private Course[] prereqs;
-        private STATUS status = STATUS.NOT_TAKEN;
+        private STATUS status;
         private Boolean electiveStatus;
         private Boolean additionalStatus;
 
-        CourseBuilder(String code) {
+        public CourseBuilder code(String code) {
             this.code = code;
+            return this;
         }
 
         public CourseBuilder title(String title) {
