@@ -8,15 +8,13 @@ import java.awt.*;
 /*
 * 28/04/2024
 *
-* V1 : implemented
+* V2 : implemented
 * Working Window
 * Icons
 * ComboBox
 * Table
-*
+* Event Listeners
 *    !! TO WORK ON:
-* Action Listeners
-*       - for action listener, change the 3 buttons' color from panelColor to outBtn on hover
 * Table Data (array list)
 * Second Table for Incomplete
 * Sorting Icons and Editable Icons
@@ -147,6 +145,26 @@ public class GUImain {
         basePanel.setBackground(panelColor);
         basePanel.setLayout(new GridBagLayout());
 
+                //hover mouse might be useless(?) since the button is covered by the icon
+        btnPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseExited(MouseEvent e) {
+                btnPanel.setBackground(panelColor);
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                btnPanel.setBackground(outButton);
+            }
+        });
+
+        //JOptionPane info button
+        appInfo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(frame, "Info", "Info", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
 
         // making table
         AbstractTableModel cur = new AbstractTableModel() {
